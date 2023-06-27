@@ -13,7 +13,7 @@ const createProduct = (req, res, next) => {
         price: req.body.price
     };
     if (req.file) {
-        product.image = req.file.image;
+        product.image = req.file.filename;
     }
     console.log(product)
     Product.create(product)

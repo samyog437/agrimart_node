@@ -27,7 +27,11 @@ const userSchema = mongoose.Schema({
         type: String,
         enul: ['Admin', 'User'],
         default: 'User'
-    }
+    },
+    delivery: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Delivery'
+    },
 }, {timestamps: true})
 
 module.exports = mongoose.model('User', userSchema)

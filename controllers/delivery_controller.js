@@ -2,12 +2,8 @@ const Delivery = require("../Model/Delivery");
 
 const orderDelivery = (req, res, next) => {
   const newDelivery = {
-    city: req.body.city,
-    area: req.body.area,
-    landmark: req.body.landmark,
-    contactNo: req.body.contactNo,
-    delivery_userId: req.user.userId,
-    productId: req.params.id,
+    ...req.body,
+    products: req.body.products,
   };
 
   Delivery.create(newDelivery)

@@ -4,6 +4,8 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const user_router = require('./routes/user_routes')
 const product_router = require('./routes/product_routes')
+const delivery_router = require('./routes/delivery_routes')
+
 
 const app = express()
 app.use(cors())
@@ -21,6 +23,7 @@ app.use(express.json())
 
 app.use('/user', user_router)
 app.use('/products', product_router)
+app.use('/delivery', delivery_router)
 app.use('/image', express.static('uploads'))
 
 

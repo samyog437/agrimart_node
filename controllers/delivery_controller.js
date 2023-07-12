@@ -17,6 +17,26 @@ const orderDelivery = (req, res, next) => {
     .catch(next);
 };
 
+const getDeliveryData = (req, res, next) => {
+  const userId = req.user.userId
+  Delivery.find({
+    deliver_userId: userId,
+  })
+  .populate({
+    path: 'products.productId',
+    select: 'title price image',
+  })
+    .then((deliveries) => {
+      res.status(200).json({
+        status:"success",
+        deliveries,
+      });
+      // console.log(`the delivery data is ${deliveries}`)
+    })
+      .catch(next)
+}
+
 module.exports = { 
     orderDelivery,
+    getDeliveryData,
 };

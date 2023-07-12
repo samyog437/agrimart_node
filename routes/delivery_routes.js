@@ -6,8 +6,6 @@ const router = express.Router()
 
 router.route('/')
     .post(verifyUser, delivery_controller.orderDelivery)
-
-// router.route('/:user_id')
-//     .get(verifyUser, delivery_controller.getOrderData)
+    .get(verifyUser, delivery_controller.getDeliveryData)
 
 module.exports = router 

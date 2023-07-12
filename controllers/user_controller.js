@@ -18,7 +18,10 @@ const registerUser = (req, res, next) => {
                 user.fullname = req.body.fullname
                 user.password = hash
                 if(req.body.role) user.role = req.body.role
-                if(req.file) user.image = req.file.path;4
+                if (req.file) {
+                    // Modify the image path to remove the "uploads" directory
+                    user.image = req.file.path.replace("uploads\\", "");
+                  }
                 user.save().then(user => {
                     res.status(201).json({
                         'status': 'User has registered successfully',
@@ -88,9 +91,58 @@ const getUserData = async(req, res, next) => {
       }
   };
 
+  const updateUser = async (req, res) => {
+    const { user_id } = req.params;
+    const { username, fullname, password } = req.body;
+  
+    try {
+      const existingUser = await User.findOne({ _id: user_id });
+      if (!existingUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      if (username && existingUser.username !== username) {
+        const userWithSameUsername = await User.findOne({ username });
+        if (userWithSameUsername && userWithSameUsername._id.toString() !== user_id) {
+          return res.status(400).json({ message: 'Username already exists' });
+        }
+      }
+  
+      let updateFields = { username, fullname };
+      if (password) {
+        updateFields.password = await bcrypt.hash(password, 10);
+      }
+  
+      // Check if image file is present in the request form-data
+      if (req.file) {
+        // Assuming you are using a file upload library that saves the image file and returns a file path or URL
+        const imagePath = req.file.path.replace("uploads\\", ""); // Replace with the actual path or URL of the uploaded image
+        updateFields.image = imagePath;
+      }
+  
+      const updatedUser = await User.findByIdAndUpdate(
+        user_id,
+        updateFields,
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.status(200).json({ data: updatedUser });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+  };
+  
+  
+
 
 module.exports = {
     registerUser,
     loginUser,
     getUserData,
+    updateUser,
 }

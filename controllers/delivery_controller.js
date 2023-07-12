@@ -1,9 +1,10 @@
 const Delivery = require("../Model/Delivery");
 
 const orderDelivery = (req, res, next) => {
-  const newDelivery = {
+  let newDelivery = {
     ...req.body,
     products: req.body.products,
+    deliver_userId: req.user.userId,
   };
 
   Delivery.create(newDelivery)
@@ -17,5 +18,5 @@ const orderDelivery = (req, res, next) => {
 };
 
 module.exports = { 
-    orderDelivery 
+    orderDelivery,
 };

@@ -36,6 +36,10 @@ const productSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
+    purchaseCount : {
+        type: Number,
+        default: 0
+    },
     reviews: [reviewSchema]
 }, {timestamps:true})
 

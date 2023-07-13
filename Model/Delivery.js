@@ -33,6 +33,11 @@ const deliverySchema = mongoose.Schema({
             }
         }
     ],
+    deliveryStatus: {
+        type: String,
+        enul: ['Ongoing', 'Delivered'],
+        default: 'Ongoing'
+    },
     deliver_userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

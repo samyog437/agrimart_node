@@ -25,6 +25,43 @@ const createProduct = (req, res, next) => {
         }).catch(next)
 }
 
+const updateProduct = (req, res, next) => {
+    let productUpdates = {};
+    if (req.body.title) {
+      productUpdates.title = req.body.title;
+    }
+    if (req.body.price) {
+      productUpdates.price = req.body.price;
+    }
+    if (req.file) {
+      productUpdates.image = req.file.filename;
+    }
+    Product.findById(req.params.id)
+      .then((product) => {
+        if (!req.file) {
+          // If no image is provided, retain the existing image
+          productUpdates.image = product.image;
+        }
+        return Product.findByIdAndUpdate(req.params.id, productUpdates, { new: true });
+      })
+      .then((updatedProduct) => {
+        res.json({
+          status: 'Product has been successfully updated',
+          product: updatedProduct,
+        });
+      })
+      .catch(next);
+  };
+
+  const deleteAProduct = (req, res, next) => {
+    Product.findByIdAndRemove(req.params.id)
+      .then(() => {
+        res.json({ status: 'Product has been successfully deleted' });
+      })
+      .catch(next);
+  };
+  
+
 
 const getAProduct = (req, res, next) => {
     Product.findById(
@@ -38,5 +75,7 @@ const getAProduct = (req, res, next) => {
 module.exports = {
     getAllProducts,
     createProduct,
+    updateProduct,
     getAProduct,
+    deleteAProduct,
 }

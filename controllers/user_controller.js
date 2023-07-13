@@ -64,6 +64,7 @@ const loginUser = (req, res, next) => {
                         if(err) return next(err)
                         res.json({
                             userId: user._id,
+                            role: user.role,
                             'status': 'User was logged in successfully',
                             token: token
                         })

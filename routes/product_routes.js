@@ -19,5 +19,7 @@ router.route('/:id/reviews')
     .get(review_controller.getAllReviews)
     .post(verifyUser,review_controller.createReview)
 
+router.route('/:id/reviews/:reviewId')
+    .delete(verifyUser, review_controller.deleteReview)
 
 module.exports = router

@@ -8,7 +8,7 @@ const verifyPayment = async (token, amount) => {
         token: token,
         amount: amount,
       },
-      {
+      { 
         headers: {
           Authorization: 'test_secret_key_3c7cfdc94ec34eb0933775b2866bde36',
         },

@@ -94,7 +94,7 @@ const getUserData = async(req, res, next) => {
 
   const updateUser = async (req, res) => {
     const { user_id } = req.params;
-    const { username, fullname, password } = req.body;
+    const { username, fullname } = req.body;
   
     try {
       const existingUser = await User.findOne({ _id: user_id });
@@ -110,10 +110,7 @@ const getUserData = async(req, res, next) => {
       }
   
       let updateFields = { username, fullname };
-      if (password) {
-        updateFields.password = await bcrypt.hash(password, 10);
-      }
-  
+
       // Check if image file is present in the request form-data
       if (req.file) {
         // Assuming you are using a file upload library that saves the image file and returns a file path or URL
@@ -137,6 +134,33 @@ const getUserData = async(req, res, next) => {
       res.status(500).json({ success: false, message: 'Server error' });
     }
   };
+
+  const updatePassword = async (req, res, next) => {
+    const { user_id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+  
+    try {
+      const user = await User.findOne({ _id: user_id });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Invalid previous password' });
+      }
+  
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedNewPassword;
+  
+      await user.save();
+  
+      res.status(200).json({ message: 'Password updated successfully' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+  };
   
   
 
@@ -146,4 +170,5 @@ module.exports = {
     loginUser,
     getUserData,
     updateUser,
+    updatePassword
 }

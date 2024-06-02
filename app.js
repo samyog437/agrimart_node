@@ -8,9 +8,7 @@ const delivery_router = require('./routes/delivery_routes')
 const khalti = require('./controllers/khalti_controller')
 
 const app = express()
-app.use(cors({
-    origin: 'https://agrimart-react.vercel.app'
-}))
+app.use(cors())
 
 const DB_URI = process.env.DB_URI;
 

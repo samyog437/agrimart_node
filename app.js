@@ -21,6 +21,8 @@ mongoose.connect(DB_URI)
 
 app.use(express.json())
 
+app.use('/', (req, res) => res.status(200).json({message: 'Hello World!'}))
+
 app.use('/user', user_router)
 app.use('/products', product_router)
 app.use('/delivery', delivery_router)
